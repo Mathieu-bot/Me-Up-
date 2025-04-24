@@ -95,7 +95,10 @@ const LoginPage = () => {
             </button>
             <p className="text-center text-xs">
               Pas de compte ?{" "}
-              <a href="/signup" className="text-courteous-blue hover:underline">
+              <a
+                href="/register"
+                className="text-courteous-blue hover:underline"
+              >
                 S'inscrire
               </a>
             </p>
