@@ -1,125 +1,94 @@
-import React, { useState } from "react";
-import { MenuIcon, XIcon } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from 'react-router-dom'
+import { FaHome, FaUsers, FaCalendarAlt, FaLightbulb } from 'react-icons/fa'
+import { MenuIcon, XIcon } from 'lucide-react'
+import { useState } from 'react'
 
-const Header = () => {
-  const navigate = useNavigate();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const handleLogin = () => {
-    navigate("/login");
-  };
-  const handleRegister = () => {
-    navigate("/register");
-  };
+const menuItems = [
+  { to: '/', label: 'Accueil', Icon: FaHome },
+  { to: '/help', label: 'Entraide', Icon: FaUsers },
+  { to: '/events', label: 'Conférences', Icon: FaCalendarAlt },
+  { to: '/projects', label: 'Projets', Icon: FaLightbulb },
+]
+
+export default function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <div className="flex-shrink-0 flex items-center">
-              <span className="text-2xl font-bold text-courteous-blue">
-                Me.Up<span className="text-coral-orange">()</span>
-              </span>
-            </div>
-            <nav className="hidden md:ml-8 md:flex md:space-x-8">
-              <a
-                href="#"
-                className="text-courteous font-medium px-3 py-2 rounded-md hover:bg-blue-50"
+    <header className="fixed w-full bg-white/60 backdrop-blur-sm shadow-md z-49">
+      <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+        <NavLink to="/" className="text-2xl font-bold text-courteous-blue">
+          Me.Up()<span className="text-coral-orange">()</span>
+        </NavLink>
+        <ul className="hidden md:flex space-x-8">
+          {menuItems.map(({ to, label, Icon }) => (
+            <li key={to}>
+              <NavLink
+                to={to}
+                className={({ isActive }) =>
+                  `flex items-center gap-1 text-sm font-medium transition-colors
+                   ${isActive ? 'text-courteous-blue' : 'text-gray-700 hover:text-courteous-blue'}
+                   relative after:absolute after:-bottom-1 after:left-0 after:h-0.5
+                   after:w-0 after:bg-courteous-blue
+                   after:transition-all
+                   hover:after:w-full`
+                }
               >
-                Accueil
-              </a>
-              <a
-                href="#"
-                className="text-gray-700 font-medium px-3 py-2 rounded-md hover:bg-blue-50"
+                <Icon className="h-4 w-4" />
+                {label}
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+        <div className="hidden md:flex space-x-4">
+          <NavLink
+            to="/login"
+            className="px-4 py-2 rounded-full bg-courteous-blue text-white hover:bg-blue-700 transition"
+          >
+            Connexion
+          </NavLink>
+          <NavLink
+            to="/register"
+            className="px-4 py-2 rounded-full border border-coral-orange text-coral-orange hover:bg-coral-orange hover:text-white transition"
+          >
+            Inscription
+          </NavLink>
+        </div>
+        <button
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="inline-flex md:hidden items-center justify-center p-2 rounded-md text-gray-700 hover:text-courteous hover:bg-blue-50"
+        >
+          {isMenuOpen ? <XIcon size={24} /> : <MenuIcon size={24} />}
+        </button>
+      </nav>
+      {isMenuOpen && (
+        <div className="md:hidden bg-white shadow-md">
+          <ul className="px-2 pt-2 pb-3 space-y-1">
+            {menuItems.map(({ to, label }) => (
+              <NavLink
+                key={to}
+                to={to}
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-blue-50"
               >
-                Entraide
-              </a>
-              <a
-                href="#"
-                className="text-gray-700 font-medium px-3 py-2 rounded-md hover:bg-blue-50"
-              >
-                Conférences
-              </a>
-              <a
-                href="#"
-                className="text-gray-700 font-medium px-3 py-2 rounded-md hover:bg-blue-50"
-              >
-                Projets
-              </a>
-            </nav>
-          </div>
-          <div className="hidden md:flex items-center">
-            <button
-              onClick={handleLogin}
-              className="bg-courteous-blue text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700"
+                {label}
+              </NavLink>
+            ))}
+          </ul>
+          <div className="px-3 pb-3 border-t border-gray-200 space-y-2">
+            <NavLink
+              to="/login"
+              className="block w-full text-center px-4 py-2 rounded-full bg-courteous-blue text-white hover:bg-blue-700"
             >
               Connexion
-            </button>
-            <button
-              onClick={handleRegister}
-              className="ml-4 bg-coral-orange text-white px-4 py-2 rounded-md font-medium hover:bg-orange-600"
+            </NavLink>
+            <NavLink
+              to="/register"
+              className="block w-full text-center px-4 py-2 rounded-full border border-coral-orange text-coral-orange hover:bg-coral-orange hover:text-white"
             >
               Inscription
-            </button>
-          </div>
-          <div className="flex items-center md:hidden">
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:text-courteous hover:bg-blue-50"
-            >
-              {isMenuOpen ? <XIcon size={24} /> : <MenuIcon size={24} />}
-            </button>
-          </div>
-        </div>
-      </div>
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="md:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            <a
-              href="#"
-              className="block px-3 py-2 rounded-md text-base font-medium text-courteous bg-blue-50"
-            >
-              Accueil
-            </a>
-            <a
-              href="#"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-blue-50"
-            >
-              Entraide
-            </a>
-            <a
-              href="#"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-blue-50"
-            >
-              Conférences
-            </a>
-            <a
-              href="#"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-blue-50"
-            >
-              Projets
-            </a>
-          </div>
-          <div className="pt-4 pb-3 border-t border-gray-200">
-            <div className="px-2 space-y-1">
-              <button
-                onClick={handleLogin}
-                className="w-full text-center bg-courteous-blue text-white px-4 py-2 rounded-md font-medium hover:bg-blue-700"
-              >
-                Connexion
-              </button>
-              <button
-                onClick={handleRegister}
-                className="w-full text-center bg-coral-orange text-white px-4 py-2 rounded-md font-medium hover:bg-orange-600"
-              >
-                Inscription
-              </button>
-            </div>
+            </NavLink>
           </div>
         </div>
       )}
     </header>
-  );
-};
-export default Header;
+  )
+}

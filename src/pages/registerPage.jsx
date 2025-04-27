@@ -1,12 +1,49 @@
-import React, { useState } from "react";
-import { User, Mail, Lock, Eye, EyeClosed } from "lucide-react";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Helmet } from "react-helmet";
+import { User as UserIcon, Mail as MailIcon, Lock as LockIcon, Loader2 as Loader2Icon } from "lucide-react";
+import api from "../api/axiosInstance";
+import PasswordInput from "../components/ui/PasswordInput";
+import Button from "../components/ui/Button";
+import Message from "../components/ui/Message";
+import ErrorPopup from "../components/ui/ErrorPopup";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { registerSchema } from "../utils/validation";
+import { MESSAGE_TEXT } from "../constants/messages";
 
 const SignupPage = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
-  return (
-    <div className="flex items-center justify-center w-screen h-screen bg-gray-200">
-      <div className="max-w-4xl p-5 grid grid-cols-1 md:grid-cols-2 rounded-3xl bg-white shadow-lg">
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(registerSchema),
+  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState({ type: "", text: "" });
+  const messageRef = useRef(null);
+  useEffect(() => {
+    if (message.text && messageRef.current) {
+      messageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [message.text]);
+  const navigate = useNavigate();
+
+  const onSubmit = useCallback(async (data) => {
+    setMessage({ type: "", text: "" });
+    setIsLoading(true);
+    try {
+      await api.post("/auth/register", data);
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+      const msg = err.response?.data?.message || MESSAGE_TEXT.GLOBAL_ERROR;
+      setMessage({ type: "error", text: msg });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [navigate]);
+
+  const content = (
+    <div className="flex items-center justify-center">
+      <div className="max-w-sm md:max-w-4xl p-5 grid grid-cols-1 md:grid-cols-2 rounded-3xl bg-white shadow-lg">
         <div className="hidden bg-courteous-blue rounded-lg md:flex justify-center items-center flex-col w-full h-full">
           <img
             src="/src/assets/signUp.png"
@@ -36,85 +73,94 @@ const SignupPage = () => {
               techniques et relationnelles.
             </p>
           </div>
-          <form className="py-4 flex flex-col gap-4">
-            <div className="flex gap-2">
-              <User
-                size={40}
-                className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white"
-              />
-              <input
-                type="text"
-                name="username"
-                placeholder="Nom d'utilisateur"
-                className="w-full p-2 bg-gray-100 outline-none rounded-md border border-gray-300 ring-1 ring-gray-300 focus:ring-courteous-blue focus:ring-2 focus:bg-gray-100"
-              />
-            </div>
-            <div className="flex gap-2">
-              <Mail
-                size={40}
-                className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white"
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                className="w-full p-2 bg-gray-100 outline-none rounded-md border border-gray-300 ring-1 ring-gray-300 focus:ring-courteous-blue focus:ring-2 focus:bg-gray-100"
-              />
-            </div>
-            <div className="relative flex items-center gap-2">
-              <Lock
-                size={40}
-                className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white"
-              />
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Mot de passe"
-                className="w-full pr-10 p-2 bg-gray-100 outline-none rounded-md border border-gray-300 ring-1 ring-gray-300 focus:ring-courteous-blue focus:ring-2 focus:bg-gray-100"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2 text-gray-500 hover:text-gray-700"
+
+          {/* inline Message removed; errors shown in ErrorPopup */}
+
+          <form onSubmit={handleSubmit(onSubmit)} className="pb-4 flex flex-col gap-4" noValidate>
+            <fieldset disabled={isLoading} className="space-y-4">
+              <label htmlFor="userName" className="flex items-center gap-2 w-full">
+                <UserIcon size={40} className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white" />
+                <input
+                  id="userName"
+                  type="text"
+                  placeholder="Nom d'utilisateur"
+                  className="w-full p-2 bg-gray-100 outline-none rounded-md border border-gray-300 focus:ring-courteous-blue focus:ring-2"
+                  {...register("userName")}
+                  aria-label="Nom d'utilisateur"
+                  aria-required="true"
+                />
+              </label>
+              {errors.userName && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.userName.message}</p>}
+              <label htmlFor="email" className="flex items-center gap-2 w-full">
+                <MailIcon size={40} className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white" />
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="Email"
+                  className="w-full p-2 bg-gray-100 outline-none rounded-md border border-gray-300 focus:ring-courteous-blue focus:ring-2"
+                  {...register("email")}
+                  aria-label="Email"
+                  aria-required="true"
+                />
+              </label>
+              {errors.email && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.email.message}</p>}
+              <label htmlFor="password" className="flex items-center gap-2 w-full">
+                <LockIcon size={40} className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white" />
+                <PasswordInput
+                  id="password"
+                  placeholder="Mot de passe"
+                  {...register("password")}
+                  aria-label="Mot de passe"
+                  aria-required="true"
+                />
+              </label>
+              {errors.password && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.password.message}</p>}
+              <label htmlFor="confirmPassword" className="flex items-center gap-2 w-full">
+                <LockIcon size={40} className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white" />
+                <PasswordInput
+                  id="confirmPassword"
+                  placeholder="Confirmer mot de passe"
+                  {...register("confirmPassword")}
+                  aria-label="Confirmer mot de passe"
+                  aria-required="true"
+                />
+              </label>
+              {errors.confirmPassword && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.confirmPassword.message}</p>}
+              <p className="text-xs">
+                Déjà un compte ? {" "}
+                <a href="/login" className="text-courteous-blue hover:underline">
+                  Connexion
+                </a>
+              </p>
+              <Button
+                type="submit"
+                className="w-full bg-courteous-blue text-white py-2 rounded-md hover:bg-blue-700 flex justify-center items-center transition-colors"
               >
-                {showPassword ? <EyeClosed size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-            <div className="relative flex items-center gap-2">
-              <Lock
-                size={40}
-                className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white"
-              />
-              <input
-                type={showConfirm ? "text" : "password"}
-                name="confirmPassword"
-                placeholder="Confirmer mot de passe"
-                className="w-full pr-10 p-2 bg-gray-100 outline-none rounded-md border border-gray-300 ring-1 ring-gray-300 focus:ring-courteous-blue focus:ring-2 focus:bg-gray-100"
-              />
-              <button
-                type="button"
-                onClick={() => setShowConfirm(!showConfirm)}
-                className="absolute right-2 text-gray-500 hover:text-gray-700"
-              >
-                {showConfirm ? <EyeClosed size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-            <p>
-              Déjà un compte ?{" "}
-              <a href="/login" className="text-courteous-blue hover:underline">
-                Connexion
-              </a>
-            </p>
-            <button
-              type="submit"
-              className="w-full bg-courteous-blue text-white py-2 rounded-md hover:bg-blue-700"
-            >
-              S'inscrire
-            </button>
+                {isLoading ? (
+                  <>
+                    <Loader2Icon className="animate-spin mr-2 h-4 w-4" />
+                    Inscription...
+                  </>
+                ) : (
+                  "S'inscrire"
+                )}
+              </Button>
+            </fieldset>
           </form>
         </div>
       </div>
     </div>
+  );
+
+  return (
+    <>
+      <Helmet>
+        <title>{`${process.env.VITE_APP_TITLE || 'Me.Up()'} - Inscription`}</title>
+        <meta name="description" content={`Inscription sur ${process.env.VITE_APP_TITLE || 'Me.Up()'}, votre application de promotion d'élites technique et relationnelle.`} />
+      </Helmet>
+      <ErrorPopup message={message.text} onClose={() => setMessage({ type: '', text: '' })} />
+      {content}
+    </>
   );
 };
 

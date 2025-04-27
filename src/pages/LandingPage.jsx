@@ -5,6 +5,7 @@ import Hero from "../components/Hero";
 import FeatureSection from "../components/FeatureSection";
 import PointsSystem from "../components/PointsSystem";
 import HowItWorks from "../components/HowItWorks";
+import { Outlet } from "react-router-dom";
 const LandingPage = () => {
   return (
     <div>
@@ -16,6 +17,7 @@ const LandingPage = () => {
         <PointsSystem />
       </main>
       <Footer />
+      <Outlet />
     </div>
   );
 };

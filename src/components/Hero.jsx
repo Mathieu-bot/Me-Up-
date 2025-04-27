@@ -1,6 +1,23 @@
 import { TrendingUp } from "lucide-react";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Wavify from "react-wavify";
+
 const Hero = () => {
+  const [paused, setPaused] = useState(true);
+  useEffect(() => {
+    let timeout;
+    const handleScroll = () => {
+      setPaused(false);
+      clearTimeout(timeout);
+      timeout = setTimeout(() => setPaused(true), 150);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timeout);
+    };
+  }, []);
+
   return (
     <div className="bg-gradient-to-r from-courteous-blue to-blue-800 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
@@ -44,6 +61,32 @@ const Hero = () => {
             />
           </div>
         </div>
+      </div>
+      <div className="absolute -bottom-8 w-full">
+        <Wavify
+          fill="#FF6F61"
+          paused={true}
+          options={{
+            height: 40,
+            amplitude: 40,
+            speed: 0.3,
+            points: 6,
+          }}
+          className="w-full fill-coral-orange"
+        />
+      </div>
+      <div className="absolute -bottom-10 w-full">
+        <Wavify
+          fill="#ffffff"
+          paused={true}
+          options={{
+            height: 40,
+            amplitude: 30,
+            speed: 0.3,
+            points: 4,
+          }}
+          className="w-full"
+        />
       </div>
     </div>
   );
