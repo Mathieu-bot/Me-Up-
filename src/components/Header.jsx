@@ -14,7 +14,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <header className="fixed w-full bg-white/60 backdrop-blur-sm shadow-md z-49">
+    <header className="fixed w-full bg-white/60 backdrop-blur-sm shadow-md z-50">
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         <NavLink to="/" className="text-2xl font-bold text-courteous-blue">
           Me.Up()<span className="text-coral-orange">()</span>

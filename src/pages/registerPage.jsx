@@ -6,7 +6,7 @@ import PasswordInput from "../components/ui/PasswordInput";
 import Button from "../components/ui/Button";
 import Message from "../components/ui/Message";
 import ErrorPopup from "../components/ui/ErrorPopup";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerSchema } from "../utils/validation";
@@ -43,7 +43,7 @@ const SignupPage = () => {
 
   const content = (
     <div className="flex items-center justify-center">
-      <div className="max-w-sm md:max-w-4xl p-5 grid grid-cols-1 md:grid-cols-2 rounded-3xl bg-white shadow-lg">
+      <div className="max-w-sm md:max-w-[52rem] p-5 grid grid-cols-1 md:grid-cols-2 rounded-3xl bg-white shadow-lg">
         <div className="hidden bg-courteous-blue rounded-lg md:flex justify-center items-center flex-col w-full h-full">
           <img
             src="/src/assets/signUp.png"
@@ -59,7 +59,7 @@ const SignupPage = () => {
         </div>
         <div className="px-6 md:px-10 flex flex-col">
           <div className="flex flex-col gap-2">
-            <h1 className="font-bold text-3xl">
+            <h1 className="font-bold text-3xl md:mb-4">
               Inscription{" "}
               <span className="text-courteous-blue">
                 Me.Up<span className="text-coral-orange">()</span>
@@ -76,8 +76,9 @@ const SignupPage = () => {
 
           {/* inline Message removed; errors shown in ErrorPopup */}
 
-          <form onSubmit={handleSubmit(onSubmit)} className="pb-4 flex flex-col gap-4" noValidate>
+          <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <fieldset disabled={isLoading} className="space-y-4">
+              <div>
               <label htmlFor="userName" className="flex items-center gap-2 w-full">
                 <UserIcon size={40} className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white" />
                 <input
@@ -90,7 +91,8 @@ const SignupPage = () => {
                   aria-required="true"
                 />
               </label>
-              {errors.userName && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.userName.message}</p>}
+              {errors.userName && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.userName.message}</p>}</div>
+              <div>
               <label htmlFor="email" className="flex items-center gap-2 w-full">
                 <MailIcon size={40} className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white" />
                 <input
@@ -104,6 +106,8 @@ const SignupPage = () => {
                 />
               </label>
               {errors.email && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.email.message}</p>}
+              </div>
+              <div>
               <label htmlFor="password" className="flex items-center gap-2 w-full">
                 <LockIcon size={40} className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white" />
                 <PasswordInput
@@ -115,6 +119,8 @@ const SignupPage = () => {
                 />
               </label>
               {errors.password && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.password.message}</p>}
+              </div>
+              <div>
               <label htmlFor="confirmPassword" className="flex items-center gap-2 w-full">
                 <LockIcon size={40} className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white" />
                 <PasswordInput
@@ -126,11 +132,12 @@ const SignupPage = () => {
                 />
               </label>
               {errors.confirmPassword && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.confirmPassword.message}</p>}
+              </div>
               <p className="text-xs">
                 Déjà un compte ? {" "}
-                <a href="/login" className="text-courteous-blue hover:underline">
+                <NavLink to="/login" className="text-courteous-blue hover:underline">
                   Connexion
-                </a>
+                </NavLink>
               </p>
               <Button
                 type="submit"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Helmet } from "react-helmet";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Mail as MailIcon, Lock as LockIcon, Smile as SmileIcon, Loader2 as Loader2Icon } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import api from "../api/axiosInstance";
@@ -49,7 +49,7 @@ const LoginPage = () => {
   // Content wrapper 
   const content = (
     <div className="flex items-center justify-center">
-      <div className="max-w-sm md:max-w-4xl p-5 grid grid-cols-1 md:grid-cols-2 rounded-3xl bg-white shadow-lg">
+      <div className="max-w-sm md:max-w-[52rem] p-5 grid grid-cols-1 md:grid-cols-2 rounded-3xl bg-white shadow-lg">
         <div className="hidden bg-courteous-blue rounded-lg md:flex flex-col w-full h-full justify-center items-center">
           <img
             src="/src/assets/NoBg.png"
@@ -79,20 +79,20 @@ const LoginPage = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className="pb-4 flex flex-col gap-4" noValidate>
             <fieldset disabled={isLoading} className="space-y-4">
-              <div className="flex gap-2">
+              <div>
                 <label htmlFor="email" className="flex items-center gap-2 w-full">
                   <MailIcon size={40} className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white" />
                   <input id="email" type="email" placeholder="Email" className="w-full p-2 bg-gray-100 outline-none rounded-md border border-gray-300 ring-1 ring-gray-300 focus:ring-courteous-blue focus:ring-2 focus:bg-gray-100" {...register("email")} aria-label="Adresse email" aria-required="true" />
                 </label>
+                {errors.email && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.email.message}</p>}
               </div>
-              {errors.email && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.email.message}</p>}
-              <div className="flex items-center gap-2">
+              <div>
                 <label htmlFor="password" className="flex items-center gap-2 w-full">
                   <LockIcon size={40} className="bg-courteous-blue p-1 rounded-ss-md rounded-ee-md fill-coral-orange text-white" />
                   <PasswordInput id="password" placeholder="Mot de passe" {...register("password")} aria-label="Mot de passe" aria-required="true" />
                 </label>
+                {errors.password && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.password.message}</p>}
               </div>
-              {errors.password && <p aria-live="assertive" className="text-red-600 text-xs mt-1">{errors.password.message}</p>}
               <div className="flex justify-between items-center text-xs">
                 <label className="flex items-center gap-1 text-gray-700">
                   <input
@@ -105,12 +105,12 @@ const LoginPage = () => {
                   />
                   Se souvenir de moi
                 </label>
-                <a
-                  href="/forgot-password"
+                <NavLink
+                  to="/forgot-password"
                   className="text-xs text-courteous-blue hover:underline"
                 >
                   Mot de passe oublié ?
-                </a>
+                </NavLink>
               </div>
               <Button
                 type="submit"
@@ -137,12 +137,12 @@ const LoginPage = () => {
               </button>
               <p className="text-center text-xs">
                 Pas de compte ?{" "}
-                <a
-                  href="/register"
+                <NavLink
+                  to="/register"
                   className="text-courteous-blue hover:underline"
                 >
                   S'inscrire
-                </a>
+                </NavLink>
               </p>
             </fieldset>
           </form>

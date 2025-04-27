@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 import api from "../api/axiosInstance";
 import Button from "../components/ui/Button";
 import Message from "../components/ui/Message";
+import { NavLink } from "react-router-dom";
 
 const ForgotPasswordPage = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
@@ -39,7 +40,7 @@ const ForgotPasswordPage = () => {
         <title>{`${process.env.VITE_APP_TITLE || 'Me.Up()'} - Mot de passe oublié`}</title>
         <meta name="description" content={`Mot de passe oublié pour ${process.env.VITE_APP_TITLE || 'Me.Up()'}. Réinitialisez votre mot de passe en quelques clics.`} />
       </Helmet>
-      <div className="flex items-center justify-center w-screen h-screen bg-gray-200">
+      <div className="flex items-center justify-center">
         <div className="max-w-md w-full p-6 rounded-lg bg-white shadow-lg">
           <h1 className="text-2xl font-bold mb-4">Mot de passe oublié</h1>
           
@@ -77,7 +78,7 @@ const ForgotPasswordPage = () => {
           </form>
           
           <p className="mt-4 text-sm">
-            Retourner à <a href="/login" className="text-courteous-blue hover:underline">Connexion</a>
+            Retourner à <NavLink to="/login" className="text-courteous-blue hover:underline">Connexion</NavLink>
           </p>
         </div>
       </div>
