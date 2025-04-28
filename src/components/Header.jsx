@@ -16,8 +16,8 @@ export default function Header() {
   return (
     <header className="fixed w-full bg-white/60 backdrop-blur-sm shadow-md z-50">
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
-        <NavLink to="/" className="text-2xl font-bold text-courteous-blue">
-          Me.Up()<span className="text-coral-orange">()</span>
+        <NavLink to="/" className="text-4xl font-bold text-courteous-blue">
+          Me.Up<span className="text-coral-orange">()</span>
         </NavLink>
         <ul className="hidden md:flex space-x-8">
           {menuItems.map(({ to, label, Icon }) => (
@@ -42,13 +42,13 @@ export default function Header() {
         <div className="hidden md:flex space-x-4">
           <NavLink
             to="/login"
-            className="px-4 py-2 rounded-full bg-courteous-blue text-white hover:bg-blue-700 transition"
+            className="px-4 py-2 rounded-lg bg-courteous-blue text-white hover:bg-blue-700 transition"
           >
             Connexion
           </NavLink>
           <NavLink
             to="/register"
-            className="px-4 py-2 rounded-full border border-coral-orange text-coral-orange hover:bg-coral-orange hover:text-white transition"
+            className="px-4 py-2 rounded-lg border border-coral-orange text-coral-orange bg-white hover:bg-coral-orange hover:text-white transition"
           >
             Inscription
           </NavLink>
@@ -76,13 +76,13 @@ export default function Header() {
           <div className="px-3 pb-3 border-t border-gray-200 space-y-2">
             <NavLink
               to="/login"
-              className="block w-full text-center px-4 py-2 rounded-full bg-courteous-blue text-white hover:bg-blue-700"
+              className="block w-full text-center px-4 py-2 rounded-lg bg-courteous-blue text-white hover:bg-blue-700"
             >
               Connexion
             </NavLink>
             <NavLink
               to="/register"
-              className="block w-full text-center px-4 py-2 rounded-full border border-coral-orange text-coral-orange hover:bg-coral-orange hover:text-white"
+              className="block w-full text-center px-4 py-2 rounded-lg border border-coral-orange text-coral-orange bg-white hover:bg-coral-orange hover:text-white"
             >
               Inscription
             </NavLink>

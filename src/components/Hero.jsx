@@ -19,8 +19,8 @@ const Hero = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-to-r from-courteous-blue to-blue-800 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+    <div className="bg-gradient-to-r from-courteous-blue to-blue-800 text-white relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-26">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -61,8 +61,7 @@ const Hero = () => {
             />
           </div>
         </div>
-      </div>
-      <div className="absolute -bottom-8 w-full">
+        <div className="absolute -bottom-10 left-0 w-full">
         <Wavify
           fill="#FF6F61"
           paused={true}
@@ -75,7 +74,7 @@ const Hero = () => {
           className="w-full fill-coral-orange"
         />
       </div>
-      <div className="absolute -bottom-10 w-full">
+      <div className="absolute -bottom-12 left-0 w-full">
         <Wavify
           fill="#ffffff"
           paused={true}
@@ -87,6 +86,7 @@ const Hero = () => {
           }}
           className="w-full"
         />
+      </div>
       </div>
     </div>
   );
